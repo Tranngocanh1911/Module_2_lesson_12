@@ -45,10 +45,18 @@ class DataProduct
         }
 
     }
-    public static function sortProduct(){
+    public static function sortProduct($type){
         $products = self::loadData();
-        array_multisort(array_column($products, 'price'), SORT_DESC, $products);
-        self::saveData($products);
+        usort($products, function ($item1, $item2) use ($type){
+            if ($type == 'up') {
+                return $item1->price > $item2->price;
+            } else {
+                return $item1->price < $item2->price;
+            }
+        });
+        return $products;
+//        array_multisort(array_column($products, 'price'), SORT_DESC, $products);
+//        self::saveData($products);
     }
 
     public static function updateProductById($id, $newProduct)
